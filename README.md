@@ -1,2 +1,0 @@
-# BudgetApo
-Finanzen verwalten 
