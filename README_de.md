@@ -1,3 +1,5 @@
+<img src="icon.jpeg" alt="BudgetApp Icon" width="100">
+
 # 💶 BudgetApp
 
 **Monatliche Einnahmen & Ausgaben auf einen Blick**
