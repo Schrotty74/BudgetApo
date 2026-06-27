@@ -149,7 +149,11 @@
   .card-value.orange { color: var(--warn); }
 
   .section { margin-bottom: 2rem; }
-  .section-title { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); margin-bottom: 0.4rem; display: flex; align-items: center; justify-content: space-between; }
+  .section-title { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); margin-bottom: 0.4rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+  .section-title:hover { color: var(--fg); }
+  .section-chevron { font-size: 0.9rem; transition: transform 0.25s ease; display: inline-block; }
+  .section-body { overflow: hidden; max-height: 9999px; transition: max-height 0.35s ease; }
+  .section-body.collapsed { max-height: 0; }
 
   .row { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.5rem; border-radius: 10px; transition: background 0.12s; min-height: 48px; }
   .row:hover, .row:active { background: rgba(255,255,255,0.04); }
@@ -341,7 +345,8 @@ if ('serviceWorker' in navigator) {
   </div>
 
   <div class="section">
-    <div class="section-title"><span>Einnahmen</span></div>
+    <div class="section-title" onclick="toggleSection('income')" id="incomeSectionTitle"><span id="incomeSectionLabel">Einnahmen</span><span class="section-chevron" id="incomeChevron">▾</span></div>
+    <div class="section-body" id="incomeBody">
     <div id="incomeRows"></div>
     <button class="btn-add" onclick="toggleAdd('income')">+ Einnahme hinzufügen</button>
     <div class="add-form" id="incomeAddForm">
@@ -356,10 +361,12 @@ if ('serviceWorker' in navigator) {
       </div>
     </div>
     <div class="total-row"><span>Gesamt</span><span id="inTotal"></span></div>
+    </div><!-- /incomeBody -->
   </div>
 
   <div class="section">
-    <div class="section-title"><span>Ausgaben</span></div>
+    <div class="section-title" onclick="toggleSection('expense')" id="expenseSectionTitle"><span id="expenseSectionLabel">Ausgaben</span><span class="section-chevron" id="expenseChevron">▾</span></div>
+    <div class="section-body" id="expenseBody">
     <div id="expenseRows"></div>
     <button class="btn-add" onclick="toggleAdd('expense')">+ Ausgabe hinzufügen</button>
     <div class="add-form" id="expenseAddForm">
@@ -383,6 +390,7 @@ if ('serviceWorker' in navigator) {
       </div>
     </div>
     <div class="total-row"><span>Gesamt / Monat</span><span id="outTotal"></span></div>
+    </div><!-- /expenseBody -->
   </div>
 
   <div class="footer">Daten werden lokal gespeichert · Läuft offline</div>
@@ -504,8 +512,8 @@ function applyLang() {
   document.querySelectorAll('.card-label')[0].textContent = l('incomeMonth');
   document.querySelectorAll('.card-label')[1].textContent = l('expenseMonth');
   document.querySelector('.section-title span').textContent = l('expenseMix');
-  document.querySelectorAll('.section-title span')[1].textContent = l('income');
-  document.querySelectorAll('.section-title span')[2].textContent = l('expenses');
+  document.getElementById('incomeSectionLabel').textContent = l('income');
+  document.getElementById('expenseSectionLabel').textContent = l('expenses');
   document.querySelectorAll('.btn-add')[0].textContent = l('addIncome');
   document.querySelectorAll('.btn-add')[1].textContent = l('addExpense');
   document.querySelectorAll('.total-row span')[0].textContent = l('total');
@@ -770,6 +778,32 @@ function deleteItem(type, i) {
 }
 
 // ---- Add ----
+// ---- Collapsible sections ----
+function toggleSection(type) {
+  const body    = document.getElementById(type === 'income' ? 'incomeBody'   : 'expenseBody');
+  const chevron = document.getElementById(type === 'income' ? 'incomeChevron': 'expenseChevron');
+  const collapsed = body.classList.toggle('collapsed');
+  chevron.style.transform = collapsed ? 'rotate(-90deg)' : '';
+  try {
+    const state = JSON.parse(localStorage.getItem('sectionState') || '{}');
+    state[type] = collapsed;
+    localStorage.setItem('sectionState', JSON.stringify(state));
+  } catch(e) {}
+}
+function initSectionState() {
+  try {
+    const state = JSON.parse(localStorage.getItem('sectionState') || '{}');
+    ['income','expense'].forEach(type => {
+      if (state[type]) {
+        const body    = document.getElementById(type === 'income' ? 'incomeBody'   : 'expenseBody');
+        const chevron = document.getElementById(type === 'income' ? 'incomeChevron': 'expenseChevron');
+        body.classList.add('collapsed');
+        chevron.style.transform = 'rotate(-90deg)';
+      }
+    });
+  } catch(e) {}
+}
+
 function toggleAdd(type) {
   const id = type==='income' ? 'incomeAddForm' : 'expenseAddForm';
   const el = document.getElementById(id);
@@ -1163,6 +1197,7 @@ update(false);
 checkEmptyState();
 applyTheme();
 if (currentLang === 'en') applyLang();
+initSectionState();
 
 // ---- Export as Image ----
 async function exportImage() {
