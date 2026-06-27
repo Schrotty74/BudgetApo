@@ -8,6 +8,10 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-vanilla-yellow)
 ![Maintained](https://img.shields.io/badge/maintained-yes-brightgreen)
 ![Mobile](https://img.shields.io/badge/mobile-friendly-blueviolet)
+![No Server](https://img.shields.io/badge/no%20server-offline%20only-lightgrey)
+![localStorage](https://img.shields.io/badge/storage-localStorage%20only-informational)
+![No Tracking](https://img.shields.io/badge/tracking-none-success)
+![No Login](https://img.shields.io/badge/login-not%20required-success)
 
 **Monatliche Einnahmen & Ausgaben auf einen Blick**
 
