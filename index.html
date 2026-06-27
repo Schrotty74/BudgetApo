@@ -301,6 +301,7 @@ if ('serviceWorker' in navigator) {
   <div class="export-row">
     <button class="btn-export" onclick="exportPDF()">📄 PDF exportieren</button>
     <button class="btn-export" onclick="exportExcel()">📊 Excel exportieren</button>
+    <button class="btn-export" onclick="exportImage()">📷 Als Bild</button>
   </div>
 
 
@@ -1145,6 +1146,40 @@ update(false);
 checkEmptyState();
 applyTheme();
 if (currentLang === 'en') applyLang();
+
+// ---- Export as Image ----
+async function exportImage() {
+  const btn = document.querySelector('[onclick="exportImage()"]');
+  const orig = btn.textContent;
+  btn.textContent = '⏳ Wird erstellt…';
+  btn.disabled = true;
+  try {
+    if (!window.html2canvas) {
+      await new Promise((res, rej) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        s.onload = res; s.onerror = rej;
+        document.head.appendChild(s);
+      });
+    }
+    const container = document.querySelector('.container');
+    const canvas = await html2canvas(container, {
+      backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg').trim() || '#0f1117',
+      scale: 2,
+      useCORS: true,
+      logging: false
+    });
+    const link = document.createElement('a');
+    link.download = 'MeinBudget_' + new Date().toLocaleDateString('de-AT').replace(/\./g, '-') + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch(e) {
+    alert('Bild-Export fehlgeschlagen. Bitte erneut versuchen.');
+  } finally {
+    btn.textContent = orig;
+    btn.disabled = false;
+  }
+}
 
 // ---- Reminder / Push Notifications ----
 function updateReminderBtn(enabled) {

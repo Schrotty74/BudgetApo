@@ -15,6 +15,15 @@
 
 [![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-open-brightgreen)](https://schrotty74.github.io/BudgetApp)
 
+## 📱 Screenshots
+
+<table>
+  <tr>
+    <td><img src="screenshots/demo-top.png" width="300" alt="Overview & Chart"></td>
+    <td><img src="screenshots/demo-bottom.png" width="300" alt="Income & Expenses"></td>
+  </tr>
+</table>
+
 **Track your monthly income & expenses at a glance**
 
 A Progressive Web App (PWA) for simple household budget management — runs directly in the browser, no installation needed, works offline.
