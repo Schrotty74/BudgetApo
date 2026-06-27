@@ -154,7 +154,9 @@
   .row { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.5rem; border-radius: 10px; transition: background 0.12s; min-height: 48px; }
   .row:hover, .row:active { background: rgba(255,255,255,0.04); }
   .row-icon { font-size: 1.05rem; width: 1.5rem; text-align: center; flex-shrink: 0; }
-  .row-name { flex: 1; font-size: 0.92rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .row-name-wrap { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+  .row-name { font-size: 0.92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .row-freq-sub { font-size: 0.65rem; color: var(--muted); font-family: 'DM Mono', monospace; line-height: 1.2; margin-top: 0.08rem; }
   .row-freq { font-size: 0.68rem; color: var(--muted); font-family: 'DM Mono', monospace; background: var(--surface2); border-radius: 5px; padding: 0.18rem 0.4rem; white-space: nowrap; flex-shrink: 0; }
   .row-amount { font-family: 'DM Mono', monospace; font-size: 0.9rem; font-weight: 500; text-align: right; min-width: 72px; flex-shrink: 0; }
   .row-pct { font-size: 0.68rem; color: var(--muted); font-family: 'DM Mono', monospace; min-width: 34px; text-align: right; flex-shrink: 0; }
@@ -593,10 +595,22 @@ const COLORS = ['#60a5fa','#f97316','#a78bfa','#34d399','#f43f5e','#fbbf24','#e8
 
 const DEFAULTS = { income: [], expenses: [] };
 
+function freqFromMonthly(monthly, freq) {
+  if (freq==='Alle 2 Monate') return monthly*2;
+  if (freq==='Quartalsweise')  return monthly*3;
+  if (freq==='Jährlich')       return monthly*12;
+  return monthly;
+}
 function loadData() {
   try {
     const saved = localStorage.getItem('budgetData');
-    if (saved) return JSON.parse(saved);
+    if (saved) {
+      const data = JSON.parse(saved);
+      data.expenses = (data.expenses||[]).map(e =>
+        e.amount == null ? {...e, amount: freqFromMonthly(e.monthly, e.freq)} : e
+      );
+      return data;
+    }
   } catch(e) {}
   return { income: [...DEFAULTS.income], expenses: [...DEFAULTS.expenses] };
 }
@@ -682,9 +696,11 @@ function renderExpenses() {
       <div class="swipe-bg">🗑</div>
       <div class="row">
         <span class="row-icon">${r.icon}</span>
-        <span class="row-name">${r.name}</span>
-        <span class="row-freq">${freqEmoji(r.freq)} ${localFreq(r.freq)}</span>
-        <span class="row-amount">${fmt(r.monthly)}</span>
+        <div class="row-name-wrap">
+          <span class="row-name">${r.name}</span>
+          ${r.freq !== 'Monatlich' ? `<span class="row-freq-sub">${freqEmoji(r.freq)} ${localFreq(r.freq)}</span>` : ''}
+        </div>
+        <span class="row-amount">${fmt(r.amount ?? r.monthly)}</span>
         <span class="row-pct">${pct.toFixed(1)}%</span>
         <div class="pct-bar"><div class="pct-fill ${large?'large':''}" style="width:${Math.min(pct*2,100)}%"></div></div>
         <div class="row-actions">
@@ -697,7 +713,7 @@ function renderExpenses() {
 
     if (editing && editing.type==='expense' && editing.idx===i) {
       const editDiv = document.createElement('div');
-      editDiv.innerHTML = inlineEditHTML('expense', i, r.icon, r.name, r.monthly, r.freq, true);
+      editDiv.innerHTML = inlineEditHTML('expense', i, r.icon, r.name, r.amount ?? r.monthly, r.freq, true);
       container.appendChild(editDiv.firstElementChild);
     }
   });
@@ -740,7 +756,7 @@ function saveEdit(type, i) {
     income[i] = { icon, name, amount: rawVal };
   } else {
     const freq = document.getElementById(`ef-freq-${type}-${i}`)?.value || 'Monatlich';
-    expenses[i] = { icon, name, freq, monthly: freqToMonthly(rawVal, freq) };
+    expenses[i] = { icon, name, freq, amount: rawVal, monthly: freqToMonthly(rawVal, freq) };
   }
   editing = null;
   update(true);
@@ -779,7 +795,7 @@ function confirmAddExpense() {
   const raw=parseFloat(document.getElementById('aeAmount').value);
   const freq=document.getElementById('aeFreq').value;
   if(!name||isNaN(raw)||raw<=0){document.getElementById('aeName').focus();return;}
-  expenses.push({icon,name,freq,monthly:freqToMonthly(raw,freq)});
+  expenses.push({icon,name,freq,amount:raw,monthly:freqToMonthly(raw,freq)});
   document.getElementById('aeName').value=''; document.getElementById('aeAmount').value=''; document.getElementById('aeIcon').value='💸';
   closeAdd('expense'); update(true);
 }
@@ -970,7 +986,7 @@ function importExcel(input) {
         if (mode === 'income') {
           newIncome.push({ icon, name, amount });
         } else {
-          newExpenses.push({ icon, name, freq, monthly: freqToMonthly(amount, freq) });
+          newExpenses.push({ icon, name, freq, amount, monthly: freqToMonthly(amount, freq) });
         }
       }
 
