@@ -25,6 +25,17 @@ self.addEventListener('activate', e => {
   );
 });
 
+// Show notification on message from main thread
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'SHOW_NOTIFICATION') {
+    self.registration.showNotification(e.data.title, {
+      body: e.data.body,
+      icon: e.data.icon,
+      badge: e.data.badge
+    });
+  }
+});
+
 // Fetch: cache-first for assets, network-first for everything else
 self.addEventListener('fetch', e => {
   e.respondWith(

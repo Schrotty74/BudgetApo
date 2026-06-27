@@ -13,6 +13,8 @@
 ![No Tracking](https://img.shields.io/badge/tracking-none-success)
 ![No Login](https://img.shields.io/badge/login-not%20required-success)
 
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-ansehen-brightgreen)](https://schrotty74.github.io/BudgetApp)
+
 **Monatliche Einnahmen & Ausgaben auf einen Blick**
 
 Eine Progressive Web App (PWA) zur einfachen Verwaltung deines Haushaltsbudgets — direkt im Browser, ohne Installation, läuft auch offline.

@@ -13,6 +13,8 @@
 ![No Tracking](https://img.shields.io/badge/tracking-none-success)
 ![No Login](https://img.shields.io/badge/login-not%20required-success)
 
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-open-brightgreen)](https://schrotty74.github.io/BudgetApp)
+
 **Track your monthly income & expenses at a glance**
 
 A Progressive Web App (PWA) for simple household budget management — runs directly in the browser, no installation needed, works offline.
