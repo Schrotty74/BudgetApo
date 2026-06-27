@@ -2,6 +2,13 @@
 
 # 💶 BudgetApp
 
+![License](https://img.shields.io/badge/license-GPL--3.0-green)
+![PWA](https://img.shields.io/badge/PWA-ready-blue)
+![HTML5](https://img.shields.io/badge/HTML5-pure-orange)
+![JavaScript](https://img.shields.io/badge/JavaScript-vanilla-yellow)
+![Maintained](https://img.shields.io/badge/maintained-yes-brightgreen)
+![Mobile](https://img.shields.io/badge/mobile-friendly-blueviolet)
+
 **Monatliche Einnahmen & Ausgaben auf einen Blick**
 
 Eine Progressive Web App (PWA) zur einfachen Verwaltung deines Haushaltsbudgets — direkt im Browser, ohne Installation, läuft auch offline.
