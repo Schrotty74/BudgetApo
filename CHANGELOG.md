@@ -4,6 +4,13 @@ Alle wesentlichen Änderungen an diesem Projekt werden hier dokumentiert.
 
 ---
 
+## [1.4] – 2026-06-27
+
+### Neu
+- **Import / Export Menü** — Alle vier Aktionen (Excel importieren, Excel exportieren, PDF exportieren, Bild exportieren) in einem einzigen Dropdown-Menü zusammengefasst; öffnet sich per Tipp und schließt sich nach Auswahl oder Klick außerhalb automatisch
+
+---
+
 ## [1.3] – 2026-06-27
 
 ### Neu
