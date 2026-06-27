@@ -42,8 +42,10 @@ Eine Progressive Web App (PWA) zur einfachen Verwaltung deines Haushaltsbudgets 
 - 📥 **Excel-Import** — `.xlsx` Dateien direkt einlesen (Einnahmen & Ausgaben werden automatisch erkannt, Leerzeichen werden normalisiert)
 - 📤 **Excel-Export** — Budget als `.xlsx` Datei exportieren
 - 🖨️ **PDF-Export** — Druckfertige Ausgabe der Monatsübersicht
+- 📷 **Bild-Export** — Gesamte Ansicht als PNG exportieren (auch als installierte PWA)
 - ✏️ **Bearbeiten** — Einträge hinzufügen, bearbeiten und löschen
 - 👆 **Swipe to delete** — Einträge per Wischgeste auf dem Handy entfernen
+- 🔔 **Tägliche Erinnerung** — Push-Benachrichtigung zur selbst gewählten Uhrzeit (nur installierte PWA)
 - 🌗 **Dark / Light Mode** — Zwischen dunklem und hellem Design wechseln (☀️ / 🌙)
 - 🌐 **Sprachwechsel** — Jederzeit zwischen Deutsch und Englisch wechseln
 - 💾 **Lokale Speicherung** — Alle Daten bleiben ausschließlich auf deinem Gerät
